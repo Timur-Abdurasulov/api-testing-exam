@@ -31,5 +31,5 @@ class ApiClient:
         return requests.delete(url)
 
     @allure.step("Validate response data")
-    def validate_data(self, result: object, model: BaseModel):
+    def validate_response(self, result: object, model: BaseModel):
         return model.model_validate(result)

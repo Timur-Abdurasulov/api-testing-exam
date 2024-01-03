@@ -1,5 +1,6 @@
 import pytest
 import allure
+from models.pets import Pet
 
 
 class TestApi:
@@ -25,21 +26,25 @@ class TestApi:
             ],
             "status": "available"
         }
-        response = api_client.post("/pet", pet)
+        response = api_client.make_request("post", "/pet", pet)
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 200
+        if response.ok:
+            response_object = response.json()
+            with allure.step("Validate response"):
+                assert api_client.validate_response(response_object, Pet)
 
     @allure.title("Add a new pet to the store without data")
     def test_add_new_pet_405(self, api_client):
-        response = api_client.post("/pet", {})
+        response = api_client.make_request("post", "/pet", {})
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 405
 
     @allure.title("Add a new pet to the store without body for request")
     def test_add_new_pet_415(self, api_client):
-        response = api_client.post("/pet")
+        response = api_client.make_request("post", "/pet")
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 415
@@ -64,10 +69,14 @@ class TestApi:
             ],
             "status": "sold"
         }
-        response = api_client.put("/pet/1", pet)
+        response = api_client.make_request("put", "/pet/1", pet)
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 200
+        if response.ok:
+            response_object = response.json()
+            with allure.step("Validate response"):
+                assert api_client.validate_response(response_object, Pet)
 
     @allure.title("Change pet status to 'lost'")
     def test_update_existing_pet_405(self, api_client):
@@ -89,7 +98,7 @@ class TestApi:
             ],
             "status": "lost"
         }
-        response = api_client.put("/pet/1", pet)
+        response = api_client.make_request("put", "/pet/1", pet)
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 405
@@ -114,7 +123,7 @@ class TestApi:
             ],
             "status": "available"
         }
-        response = api_client.put("/pet/99", pet)
+        response = api_client.make_request("put", "/pet/99", pet)
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 404
@@ -139,7 +148,7 @@ class TestApi:
             ],
             "status": "available"
         }
-        response = api_client.put("/pet/p", pet)
+        response = api_client.make_request("put", "/pet/p", pet)
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 400
@@ -164,7 +173,7 @@ class TestApi:
             ],
             "status": "available"
         }
-        response = api_client.put("/pet/99", pet)
+        response = api_client.make_request("put", "/pet/99", pet)
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 404
