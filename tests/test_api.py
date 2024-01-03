@@ -94,8 +94,7 @@ class TestApi:
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 405
 
-
-    @allure.title("Change data of nonexisten pet")
+    @allure.title("Change data of nonexistent pet")
     def test_update_nonexistent_pet_404(self, api_client):
         pet = {
             "id": 99,
