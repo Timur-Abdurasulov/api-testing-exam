@@ -1,5 +1,4 @@
-Команда для запуска тестов:
-
+To run tests use the following command:
 ```
-pytest tests/test_api.py --alluredir=allure-results/%номер или название папки%
+pytest tests/test_api.py --alluredir=allure-results/%folder number or name%
 ```
