@@ -11,7 +11,6 @@ services:
     volumes:
       - ./allure-results:/app/allure-results
       - ./allure-reports:/app/default-reports
-    
 
   allure-ui:
     image: "frankescobar/allure-docker-service-ui"
@@ -21,4 +20,6 @@ services:
     ports:
       - "5252:5252"
 
-
+volumes:
+  allure-results:
+  allure-reports:
