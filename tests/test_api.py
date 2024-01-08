@@ -1,10 +1,11 @@
-import pytest
 import allure
-from models.pets import Pet
+from models.pet import Pet
 
 
 class TestApi:
     url = "https://petstore.swagger.io/v2"
+
+    # POST requests
 
     @allure.title("Add a new pet to the store in a valid way")
     def test_add_new_pet_200(self, api_client):
@@ -26,7 +27,7 @@ class TestApi:
             ],
             "status": "available"
         }
-        response = api_client.make_request("post", "/pet", pet)
+        response = api_client.post("/pet", pet)
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 200
@@ -37,20 +38,22 @@ class TestApi:
 
     @allure.title("Add a new pet to the store without data")
     def test_add_new_pet_405(self, api_client):
-        response = api_client.make_request("post", "/pet", {})
+        response = api_client.post("/pet", {})
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 405
 
-    @allure.title("Add a new pet to the store without body for request")
+    @allure.title("Add a new pet to the store without body")
     def test_add_new_pet_415(self, api_client):
-        response = api_client.make_request("post", "/pet")
+        response = api_client.post("/pet")
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 415
 
+    # PUT requests
+
     @allure.title("Change pet status to 'sold'")
-    def test_update_existing_pet_200(self, api_client):
+    def test_change_status_to_sold_200(self, api_client):
         pet = {
             "id": 1,
             "category": {
@@ -69,7 +72,7 @@ class TestApi:
             ],
             "status": "sold"
         }
-        response = api_client.make_request("put", "/pet/1", pet)
+        response = api_client.put("/pet/1", pet)
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 200
@@ -79,7 +82,7 @@ class TestApi:
                 assert api_client.validate_response(response_object, Pet)
 
     @allure.title("Change pet status to 'lost'")
-    def test_update_existing_pet_405(self, api_client):
+    def test_change_status_to_lost_405(self, api_client):
         pet = {
             "id": 1,
             "category": {
@@ -98,13 +101,13 @@ class TestApi:
             ],
             "status": "lost"
         }
-        response = api_client.make_request("put", "/pet/1", pet)
+        response = api_client.put("/pet/1", pet)
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 405
 
-    @allure.title("Change data of nonexistent pet")
-    def test_update_nonexistent_pet_404(self, api_client):
+    @allure.title("Change data of non existent pet")
+    def test_update_non_existent_pet_404(self, api_client):
         pet = {
             "id": 99,
             "category": {
@@ -123,13 +126,13 @@ class TestApi:
             ],
             "status": "available"
         }
-        response = api_client.make_request("put", "/pet/99", pet)
+        response = api_client.put("/pet/99", pet)
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 404
 
-    @allure.title("Change data with invalid pet id")
-    def test_update_pet_invalid_id_400(self, api_client):
+    @allure.title("Change data of a pet with invalid id")
+    def test_update_pet_with_invalid_id_400(self, api_client):
         pet = {
             "id": "p",
             "category": {
@@ -148,35 +151,39 @@ class TestApi:
             ],
             "status": "available"
         }
-        response = api_client.make_request("put", "/pet/p", pet)
+        response = api_client.put("/pet/p", pet)
         print(response)
         with allure.step(f"Check status {response.status_code}"):
             assert response.status_code == 400
 
-    @allure.title("Change data of pet with ")
-    def test_update_nonexistent_pet_404(self, api_client):
-        pet = {
-            "id": 99,
-            "category": {
-                "id": 99,
-                "name": "category99"
-            },
-            "name": "doggie99",
-            "photoUrls": [
-                "https://example.com/pet99_photo.jpg"
-            ],
-            "tags": [
-                {
-                    "id": 99,
-                    "name": "tag99"
-                }
-            ],
-            "status": "available"
+    # GET requests
+
+    @allure.title("Find pet by the 'Sold' status")
+    def test_find_pet_200(self, api_client):
+        params = {
+            "status": "sold"
         }
-        response = api_client.make_request("put", "/pet/99", pet)
+        response = api_client.get("/pet/findByStatus", params)
         print(response)
         with allure.step(f"Check status {response.status_code}"):
-            assert response.status_code == 404
+            assert response.status_code == 200
+        if response.ok:
+            response_object = response.json()
+            for pet in response_object:
+                with allure.step("Validate pet in response"):
+                    assert api_client.validate_response(pet, Pet)
+
+    @allure.title("Find pet by the 'Lost' status")
+    def test_find_pet_400(self, api_client):
+        params = {
+            "status": "lost"
+        }
+        response = api_client.get("/pet/findByStatus", params)
+        print(response)
+        with allure.step(f"Check status {response.status_code}"):
+            assert response.status_code == 400
+
+    # DELETE requests
 
     @allure.title("Delete pet")
     def test_delete_pet_200(self, api_client):
@@ -197,4 +204,4 @@ class TestApi:
         response = api_client.delete("/pet/p")
         print(response)
         with allure.step(f"Check status {response.status_code}"):
-            assert response.status_code == 404
+            assert response.status_code == 400

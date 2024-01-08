@@ -11,6 +11,7 @@ services:
     volumes:
       - ./allure-results:/app/allure-results
       - ./allure-reports:/app/default-reports
+    command: pytest tests/test_api.py --alluredir="allure-results/$(date +'%d%m%Y-%H%M%S')"
 
   allure-ui:
     image: "frankescobar/allure-docker-service-ui"
