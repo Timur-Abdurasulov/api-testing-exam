@@ -1,1 +1,1 @@
-[]
+[{"uid":"e6b04255711cac6d","name":"Add a new pet to the store in a valid way","time":{"start":1704888915864,"stop":1704888917097,"duration":1233},"status":"passed","severity":"normal"},{"uid":"4e64ad90fe65ed5a","name":"Add a new pet to the store without data","time":{"start":1704888917099,"stop":1704888918208,"duration":1109},"status":"failed","severity":"normal"}]

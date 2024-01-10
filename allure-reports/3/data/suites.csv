@@ -1,0 +1,5 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"failed","Wed Jan 10 12:15:18 UTC 2024","Wed Jan 10 12:15:19 UTC 2024","1119","tests","test_api","TestApi","","","Add a new pet to the store without body",""
+"passed","Wed Jan 10 12:15:15 UTC 2024","Wed Jan 10 12:15:17 UTC 2024","1233","tests","test_api","TestApi","","","Add a new pet to the store in a valid way",""
+"failed","Wed Jan 10 12:15:19 UTC 2024","Wed Jan 10 12:15:20 UTC 2024","1146","tests","test_api","TestApi","","","Change pet status to 'sold'",""
+"failed","Wed Jan 10 12:15:17 UTC 2024","Wed Jan 10 12:15:18 UTC 2024","1109","tests","test_api","TestApi","","","Add a new pet to the store without data",""

@@ -9,9 +9,8 @@ services:
     ports:
       - "5050:5050"
     volumes:
-      - ./allure-results:/app/allure-results
-      - ./allure-reports:/app/default-reports
-    command: bash -c "D:/Pycharm_Projects/api-testing-exam/.venv/Scripts/pytest.exe tests/test_api.py --alluredir='allure-results/$(date +'%d%m%Y-%H%M%S')'"
+      - allure-results:/app/allure-results
+      - allure-reports:/app/default-reports
 
   allure-ui:
     image: "frankescobar/allure-docker-service-ui"
@@ -20,6 +19,7 @@ services:
       ALLURE_DOCKER_PUBLIC_API_URL_PREFIX: ""
     ports:
       - "5252:5252"
+    command: ".venv/Scripts/pytest.exe tests/test_api.py --alluredir='allure-results'"
 
 volumes:
   allure-results:
